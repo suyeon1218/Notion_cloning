@@ -5,6 +5,7 @@ class App {
 
 	constructor($target: Element) {
 		this.$target = $target;
+		this.render();
 	}
 
 	render() {
