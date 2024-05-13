@@ -53,7 +53,7 @@
 
 ### EditorTitle UI 구현하기
 
-- [ ] 제목을 표시하는 UI 를 구현한다.
+- [x] 제목을 표시하는 UI 를 구현한다.
 
 ### EditorTitle 기능 추가
 

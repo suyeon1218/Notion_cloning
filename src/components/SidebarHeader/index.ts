@@ -18,6 +18,7 @@ class SidebarHeader {
 	render() {
 		if (this.$sidebarHeader) {
 			this.$sidebarHeader.innerHTML = `
+				<a>Notion Cloning</a>
 			`;
 		}
 	}
