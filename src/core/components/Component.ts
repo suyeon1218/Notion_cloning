@@ -6,7 +6,7 @@ export interface ComponentProps<Props = any, State = any> {
 
 type ChildComponent = new ({ ...args }: ComponentProps) => Component;
 
-class Component<Props = { [key: string]: any }, State = any> {
+class Component<Props = any, State = any> {
   $target;
   props;
   state;
@@ -23,6 +23,7 @@ class Component<Props = { [key: string]: any }, State = any> {
 
   setState(nextState: State) {
     this.state = nextState;
+    this.initComponent();
     this.render();
   }
 
@@ -44,8 +45,12 @@ class Component<Props = { [key: string]: any }, State = any> {
     return new ChildComponent({ $target: $element, ...props });
   }
 
+  initComponent() {
+    this.$target.innerHTML = ``;
+  }
+
   render() {
-    this.$target.innerHTML = this.template();
+    this.$target.insertAdjacentHTML('beforeend', this.template());
   }
 }
 

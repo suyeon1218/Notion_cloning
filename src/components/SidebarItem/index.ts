@@ -1,43 +1,16 @@
-interface DocumentItem {
-  id: string;
-  title: string;
-  documents: DocumentItem[];
+import Component from '~/core/components/Component';
+import { DocumentItemType } from '../SidebarList';
+
+interface SidebarItemProps {
+  documentItem: DocumentItemType;
+  depth: number;
 }
 
-interface Component {
-  $target: Element;
-  props: any;
-}
+class SidebarItem extends Component<SidebarItemProps, DocumentItemType> {
+  template(): string {
+    const { depth, documentItem } = this.props as SidebarItemProps;
 
-class SidebarItem {
-  $target: Element;
-  $sidebarItem: HTMLLIElement | null;
-  props: {
-    documentItem: DocumentItem;
-  };
-
-  constructor({ $target, props }: Component) {
-    this.$target = $target;
-    this.$sidebarItem = null;
-    this.props = props;
-    this.init();
-    this.render();
-  }
-
-  init() {
-    this.$sidebarItem = document.createElement('li');
-    this.$sidebarItem.classList.add('sidebar__item');
-    this.$target.appendChild(this.$sidebarItem);
-  }
-
-  render() {
-    const { documentItem } = this.props;
-
-    if (this.$sidebarItem instanceof Element) {
-      this.$sidebarItem.innerHTML = `
-        <span>${documentItem.title}</span>
-      `;
-    }
+    return `<div class='sidebar__item sidebar__item--${depth}'>${documentItem.title}</div>`;
   }
 }
 

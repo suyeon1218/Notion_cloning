@@ -13,7 +13,7 @@
 
 ### DocumentList UI 를 구현한다
 
-- [ ] Root Document 를 불러와 하위 리스트들을 렌더링한다.
+- [x] Root Document 를 불러와 하위 리스트들을 렌더링한다.
 
 ## DocumentItem
 
