@@ -23,13 +23,14 @@ class Component<Props = any, State = any> {
 
   setState(nextState: State) {
     this.state = nextState;
-    this.initComponent();
     this.render();
   }
 
   beforeMount() {}
 
   mounted() {}
+
+  updated() {}
 
   template() {
     return ``;
@@ -46,11 +47,13 @@ class Component<Props = any, State = any> {
   }
 
   initComponent() {
-    this.$target.innerHTML = ``;
+    this.$target.innerHTML = '';
   }
 
   render() {
+    this.initComponent();
     this.$target.insertAdjacentHTML('beforeend', this.template());
+    this.updated();
   }
 }
 

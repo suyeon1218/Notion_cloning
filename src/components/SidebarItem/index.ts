@@ -6,11 +6,30 @@ interface SidebarItemProps {
   depth: number;
 }
 
-class SidebarItem extends Component<SidebarItemProps, DocumentItemType> {
-  template(): string {
-    const { depth, documentItem } = this.props as SidebarItemProps;
+interface SidebarItemState {
+  isOpen: boolean;
+}
 
-    return `<div class='sidebar__item sidebar__item--${depth}'>${documentItem.title}</div>`;
+class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
+  beforeMount(): void {
+    this.setState({
+      ...this.state,
+      isOpen: false,
+    });
+  }
+
+  template(): string {
+    const { documentItem } = this.props as SidebarItemProps;
+    const { isOpen } = this.state as SidebarItemState;
+
+    return `
+        <div class='sidebar__item-toggle'>${isOpen ? '▼' : '▶︎'}</div>
+        <div class='sidebar__item-title'>${documentItem.title}</div>
+        <div class='sidebar__item-buttons'>
+          <div>+</div>
+          <div>X</div>
+        </div>
+      `;
   }
 }
 

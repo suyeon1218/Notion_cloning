@@ -17,14 +17,23 @@ class SidebarList extends Component<
     this.setState(data);
   }
 
-  template(): string {
+  updated() {
     this.state?.forEach((documentItem) =>
-      this.children(SidebarItem, '.sidebar__list', {
+      this.children(SidebarItem, `#side__item-${documentItem.id}`, {
         props: { documentItem, depth: 0 },
       })
     );
+  }
 
-    return '';
+  template(): string {
+    return this.state
+      ? this.state
+          .map(
+            (documentItem) =>
+              `<div id='side__item-${documentItem.id}' class='sidebar__item sidebar__item--0'></div>`
+          )
+          .join('')
+      : '';
   }
 }
 
