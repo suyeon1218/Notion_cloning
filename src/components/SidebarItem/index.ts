@@ -26,8 +26,8 @@ class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
         <div class='sidebar__item-toggle'>${isOpen ? '▼' : '▶︎'}</div>
         <div class='sidebar__item-title'>${documentItem.title}</div>
         <div class='sidebar__item-buttons'>
-          <div>+</div>
-          <div>X</div>
+          <div class='sidebar__item-create'>+</div>
+          <div class='sidebar__item-delete'>X</div>
         </div>
       `;
   }

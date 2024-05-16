@@ -52,15 +52,48 @@
 }
 
 .sidebar__item {
-  height: 30px;
+  box-sizing: border-box;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 5px;
+  color: rgb(104, 102, 102);
+  cursor: pointer;
+  padding: 5px;
 
-  &--0 {
-    padding-left: 0px;
+  &:hover {
+    background-color: rgb(242, 241, 241);
   }
-  &--1 {
-    padding-left: 0px;
+}
+
+.sidebar__item-buttons {
+  display: flex;
+}
+
+.sidebar__item-toggle,
+.sidebar__item-create,
+.sidebar__item-delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  color: #aaa;
+
+  &:hover {
+    background-color: rgb(218, 217, 217);
   }
-  &--2 {
-    padding-left: 0px;
-  }
+}
+
+.sidebar__item-toggle,
+.sidebar__item-delete {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.sidebar__item-title {
+  flex-grow: 1;
 }
