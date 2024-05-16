@@ -1,26 +1,17 @@
-class SidebarHeader {
-  $target: Element;
-  $sidebarHeader: HTMLDivElement | null;
+import Component from '~/core/components/Component';
 
-  constructor($target: Element) {
-    this.$target = $target;
-    this.$sidebarHeader = null;
-    this.init();
-    this.render();
-  }
-
-  init() {
-    this.$sidebarHeader = document.createElement('div');
-    this.$sidebarHeader.classList.add('sidebar__header');
-    this.$target.appendChild(this.$sidebarHeader);
-  }
-
-  render() {
-    if (this.$sidebarHeader) {
-      this.$sidebarHeader.innerHTML = `
-				<a>Notion Cloning</a>
-			`;
-    }
+class SidebarHeader extends Component {
+  template(): string {
+    return `
+      <div class='sidebar__container'>
+        <div class='sidebar__header-img'>
+          <img src='/src/assets/propfile.png' />
+        </div>
+        <div class='sidebar__header-title'>
+          수연의 Notion
+        </div>
+      </div>
+      `;
   }
 }
 

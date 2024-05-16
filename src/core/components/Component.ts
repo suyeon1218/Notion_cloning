@@ -18,6 +18,7 @@ class Component<Props = { [key: string]: any }, State = any> {
 
     this.beforeMount();
     this.render();
+    this.mounted();
   }
 
   setState(nextState: State) {

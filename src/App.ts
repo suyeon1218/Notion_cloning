@@ -1,15 +1,13 @@
 import SideBar from './components/SideBar';
+import Component from './core/components/Component';
 
-class App {
-  $target: Element;
-
-  constructor($target: Element) {
-    this.$target = $target;
-    this.render();
+class App extends Component {
+  template(): string {
+    return `<div class='sidebar'></div>`;
   }
 
-  render() {
-    new SideBar(this.$target);
+  mounted() {
+    this.children(SideBar, '.sidebar');
   }
 }
 
