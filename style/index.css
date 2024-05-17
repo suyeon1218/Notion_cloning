@@ -1,5 +1,6 @@
 @import url('./reset.css');
 @import url('./sidebar.css');
+@import url('./main-page.css');
 
 body > * {
   font-family: 'Pretendard Variable', Pretendard, -apple-system,
@@ -11,4 +12,8 @@ body > * {
 button {
   background-color: transparent;
   border: 0px;
+}
+
+.App {
+  display: flex;
 }
