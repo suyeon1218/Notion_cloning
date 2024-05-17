@@ -18,6 +18,7 @@ class Component<Props = any, State = any> {
 
     this.beforeMount();
     this.render();
+    this.addEvent();
     this.mounted();
   }
 
@@ -25,6 +26,8 @@ class Component<Props = any, State = any> {
     this.state = nextState;
     this.render();
   }
+
+  addEvent() {}
 
   beforeMount() {}
 
@@ -42,7 +45,6 @@ class Component<Props = any, State = any> {
     props?: Omit<ConstructorParameters<ChildComponent>[0], '$target'>
   ) {
     const $element = document.querySelector(selector) as Element;
-
     return new ChildComponent({ $target: $element, ...props });
   }
 

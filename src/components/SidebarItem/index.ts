@@ -18,17 +18,66 @@ class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
     });
   }
 
+  updated(): void {
+    const { documentItem, depth } = this.props as SidebarItemProps;
+    const { isOpen } = this.state as SidebarItemState;
+
+    if (isOpen) {
+      documentItem.documents.forEach((childDocument) =>
+        this.children(SidebarItem, `#sidebar__item-${childDocument.id}`, {
+          props: {
+            documentItem: childDocument,
+            depth: depth + 1,
+          },
+        })
+      );
+    }
+  }
+
+  addEvent() {
+    this.$target.addEventListener('click', (event) => {
+      event.stopPropagation();
+
+      if (event.target instanceof Element) {
+        const $button = event.target.closest('button');
+
+        if ($button?.className === 'sidebar__item-toggle') {
+          const { isOpen } = this.state as SidebarItemState;
+
+          this.setState({
+            ...this.state,
+            isOpen: !isOpen,
+          });
+        }
+      }
+    });
+  }
+
   template(): string {
-    const { documentItem } = this.props as SidebarItemProps;
+    const { documentItem, depth } = this.props as SidebarItemProps;
     const { isOpen } = this.state as SidebarItemState;
 
     return `
-        <div class='sidebar__item-toggle'>${isOpen ? '▼' : '▶︎'}</div>
+      <li 
+        class='sidebar__item sidebar__item--${depth}' 
+        style='padding-left: ${depth * 15}px'>
+        <button class='sidebar__item-toggle'>${isOpen ? '▼' : '▶︎'}</button>
         <div class='sidebar__item-title'>${documentItem.title}</div>
         <div class='sidebar__item-buttons'>
-          <div class='sidebar__item-create'>+</div>
-          <div class='sidebar__item-delete'>X</div>
+          <button class='sidebar__item-create'>+</button>
+          <button class='sidebar__item-delete'>X</button>
         </div>
+      </li>
+      ${
+        isOpen
+          ? documentItem.documents
+              .map(
+                (childDocument) =>
+                  `<ul id='sidebar__item-${childDocument.id}'></ul>`
+              )
+              .join('')
+          : ''
+      }
       `;
   }
 }

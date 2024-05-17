@@ -19,7 +19,7 @@ class SidebarList extends Component<
 
   updated() {
     this.state?.forEach((documentItem) =>
-      this.children(SidebarItem, `#side__item-${documentItem.id}`, {
+      this.children(SidebarItem, `#sidebar__item-${documentItem.id}`, {
         props: { documentItem, depth: 0 },
       })
     );
@@ -29,8 +29,7 @@ class SidebarList extends Component<
     return this.state
       ? this.state
           .map(
-            (documentItem) =>
-              `<div id='side__item-${documentItem.id}' class='sidebar__item sidebar__item--0'></div>`
+            (documentItem) => `<ul id='sidebar__item-${documentItem.id}'></ul>`
           )
           .join('')
       : '';
