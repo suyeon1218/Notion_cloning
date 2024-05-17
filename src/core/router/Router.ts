@@ -1,32 +1,37 @@
 import Component from '~/core/components/Component';
 
-interface RouteType {
+export interface RouteType {
   path: string;
   element: typeof Component;
 }
 
 class Router {
   private static instance: Router;
-  private routes: RouteType[];
-  static route: typeof Component;
+  private routes: RouteType[] | undefined;
+  route?: typeof Component;
 
-  constructor(routes: RouteType[]) {
-    this.routes = routes;
-
+  constructor() {
     if (!Router.instance) {
       Router.instance = this;
-      this.init();
     }
 
     return Router.instance;
   }
 
-  init() {
+  createRouter(routes: RouteType[]) {
+    this.routes = routes;
+    this.routing();
+
+    return this.route as typeof Component;
+  }
+
+  navigate(url: string) {
+    history.pushState(null, '', url);
     this.routing();
   }
 
   routing() {
-    const currentRoute = this.routes.find((route) => {
+    const currentRoute = this.routes?.find((route) => {
       if (route.path === '') {
         return route;
       }
@@ -36,9 +41,13 @@ class Router {
     });
 
     if (currentRoute) {
-      Router.route = currentRoute.element;
+      this.route = currentRoute.element;
     }
+
+    return this.route;
   }
 }
 
-export default Router;
+const router = new Router();
+
+export default router;
