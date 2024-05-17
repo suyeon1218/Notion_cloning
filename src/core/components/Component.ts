@@ -49,13 +49,17 @@ class Component<Props = any, State = any> {
   }
 
   initComponent() {
-    this.$target.innerHTML = '';
+    if (this.$target instanceof Element) {
+      this.$target.innerHTML = '';
+    }
   }
 
   render() {
-    this.initComponent();
-    this.$target.insertAdjacentHTML('beforeend', this.template());
-    this.updated();
+    if (this.$target instanceof Element) {
+      this.initComponent();
+      this.$target.insertAdjacentHTML('beforeend', this.template());
+      this.updated();
+    }
   }
 }
 
