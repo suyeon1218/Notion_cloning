@@ -68,6 +68,15 @@
   }
 }
 
+.sidebar__item--none {
+  color: #aaa;
+  cursor: default;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
 .sidebar__item-buttons {
   display: flex;
 }

@@ -59,7 +59,7 @@ class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
 
     return `
       <li 
-        class='sidebar__item sidebar__item--${depth}' 
+        class='sidebar__item' 
         style='padding-left: ${depth * 15}px'>
         <button class='sidebar__item-toggle'>${isOpen ? '▼' : '▶︎'}</button>
         <div class='sidebar__item-title'>${documentItem.title}</div>
@@ -69,13 +69,19 @@ class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
         </div>
       </li>
       ${
-        isOpen
+        isOpen && documentItem.documents.length > 0
           ? documentItem.documents
               .map(
                 (childDocument) =>
                   `<ul id='sidebar__item-${childDocument.id}'></ul>`
               )
               .join('')
+          : isOpen && documentItem.documents.length === 0
+          ? `<li 
+              class='sidebar__item sidebar__item--none'
+              style='padding-left: ${(depth + 1) * 15}px'>
+                하위 페이지 없음
+              </li>`
           : ''
       }
       `;
