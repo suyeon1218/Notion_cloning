@@ -1,10 +1,10 @@
 import App from './App.js';
-import Router from './core/router/Router.js';
 import MainPage from './pages/MainPage.js';
 import EditorPage from './pages/EditorPage.js';
 import NotFoundPage from './pages/NotFoundPage.js';
+import { createRouter } from './core/router';
 
-new Router([
+const route = createRouter([
   {
     path: '/',
     element: MainPage,
@@ -25,7 +25,7 @@ if ($app instanceof Element) {
   new App({
     $target: $app,
     props: {
-      Outlet: Router.route,
+      Outlet: route,
     },
   });
 }

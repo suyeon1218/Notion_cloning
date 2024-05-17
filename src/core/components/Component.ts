@@ -44,8 +44,11 @@ class Component<Props = any, State = any> {
     selector: string,
     props?: Omit<ConstructorParameters<ChildComponent>[0], '$target'>
   ) {
-    const $element = document.querySelector(selector) as Element;
-    return new ChildComponent({ $target: $element, ...props });
+    const $element = document.querySelector(selector);
+
+    if ($element instanceof Element) {
+      new ChildComponent({ $target: $element, ...props });
+    }
   }
 
   initComponent() {

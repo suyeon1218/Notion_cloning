@@ -36,8 +36,6 @@ class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
 
   addEvent() {
     this.$target.addEventListener('click', (event) => {
-      event.stopPropagation();
-
       if (event.target instanceof Element) {
         const $button = event.target.closest('button');
 
@@ -73,7 +71,7 @@ class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
           ? documentItem.documents
               .map(
                 (childDocument) =>
-                  `<ul id='sidebar__item-${childDocument.id}'></ul>`
+                  `<ul data-id=${childDocument.id} id='sidebar__item-${childDocument.id}'></ul>`
               )
               .join('')
           : isOpen && documentItem.documents.length === 0

@@ -1,6 +1,7 @@
 import { requestRootDocument } from '~/api/request';
 import Component from '~/core/components/Component';
 import SidebarItem from '../SidebarItem';
+import { navigate } from '~/core/router';
 
 export interface DocumentItemType {
   id: string;
@@ -25,11 +26,26 @@ class SidebarList extends Component<
     );
   }
 
+  addEvent(): void {
+    this.$target.addEventListener('click', (event) => {
+      if (event.target instanceof Element) {
+        const { target } = event;
+        const $ul = event.target.closest('ul') as HTMLUListElement;
+
+        if (target && target.classList.contains('sidebar__item-title')) {
+          const { id } = $ul.dataset;
+          navigate(`/documents/${id}`);
+        }
+      }
+    });
+  }
+
   template(): string {
     return this.state
       ? this.state
           .map(
-            (documentItem) => `<ul id='sidebar__item-${documentItem.id}'></ul>`
+            (documentItem) =>
+              `<ul data-id=${documentItem.id} id='sidebar__item-${documentItem.id}'></ul>`
           )
           .join('')
       : '';
