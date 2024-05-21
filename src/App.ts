@@ -1,11 +1,26 @@
 import SideBar from './components/SideBar';
 import Component from './core/components/Component';
+import MainPage from './pages/MainPage.js';
+import EditorPage from './pages/EditorPage.js';
+import NotFoundPage from './pages/NotFoundPage.js';
+import { createRouter } from './core/router';
 
-interface AppProps {
-  Outlet: typeof Component;
-}
+const router = createRouter([
+  {
+    path: '/',
+    element: MainPage,
+  },
+  {
+    path: '/documents',
+    element: EditorPage,
+  },
+  {
+    path: '',
+    element: NotFoundPage,
+  },
+]);
 
-class App extends Component<AppProps, any> {
+class App extends Component {
   template(): string {
     return `
       <div class='sidebar'></div>
@@ -14,10 +29,8 @@ class App extends Component<AppProps, any> {
   }
 
   mounted() {
-    const { Outlet } = this.props as AppProps;
-
     this.children(SideBar, '.sidebar');
-    this.children(Outlet, '.main');
+    router.render('.main');
   }
 }
 

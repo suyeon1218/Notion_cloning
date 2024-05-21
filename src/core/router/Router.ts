@@ -6,28 +6,36 @@ export interface RouteType {
 }
 
 class Router {
-  private static instance: Router;
   private routes: RouteType[] | undefined;
-  route?: typeof Component;
+  private $target: Element | undefined;
+  route: { Element: typeof Component | undefined };
 
   constructor() {
-    if (!Router.instance) {
-      Router.instance = this;
-    }
+    this.route = { Element: undefined };
+  }
 
-    return Router.instance;
+  render(selector?: string) {
+    const $target = selector ? document.querySelector(selector) : this.$target;
+
+    if ($target instanceof Element && this.route.Element) {
+      const { Element } = this.route;
+
+      this.$target = $target;
+      new Element({ $target });
+    }
   }
 
   createRouter(routes: RouteType[]) {
     this.routes = routes;
     this.routing();
 
-    return this.route as typeof Component;
+    return this;
   }
 
   navigate(url: string) {
     history.pushState(null, '', url);
     this.routing();
+    this.render();
   }
 
   routing() {
@@ -40,11 +48,9 @@ class Router {
       return LocationPathName === route.path;
     });
 
-    if (currentRoute) {
-      this.route = currentRoute.element;
+    if (currentRoute && this.route) {
+      this.route.Element = currentRoute.element;
     }
-
-    return this.route;
   }
 }
 
