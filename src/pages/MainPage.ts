@@ -3,9 +3,11 @@ import Component from '~/core/components/Component';
 class MainPage extends Component {
   template(): string {
     return `
-      <header>안녕하세요!</header>
+      <div>MainPage</div>
     `;
   }
+
+  updated(): void {}
 }
 
 export default MainPage;

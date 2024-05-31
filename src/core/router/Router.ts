@@ -1,31 +1,27 @@
 import Component from '~/core/components/Component';
+import { findRoute } from './Util';
 
-export interface RouteType {
+export interface Route {
   path: string;
   element: typeof Component;
+  children?: Route[];
 }
 
+export interface Params {
+  [key: string]: any;
+}
+
+export type CurrRoute = Route & { params: Params | undefined };
+
 class Router {
-  private routes: RouteType[] | undefined;
-  private $target: Element | undefined;
-  route: { Element: typeof Component | undefined };
+  private routes: Route[] | undefined;
+  currRoutes: CurrRoute[];
 
   constructor() {
-    this.route = { Element: undefined };
+    this.currRoutes = [];
   }
 
-  render(selector?: string) {
-    const $target = selector ? document.querySelector(selector) : this.$target;
-
-    if ($target instanceof Element && this.route.Element) {
-      const { Element } = this.route;
-
-      this.$target = $target;
-      new Element({ $target });
-    }
-  }
-
-  createRouter(routes: RouteType[]) {
+  createRouter(routes: Route[]) {
     this.routes = routes;
     this.routing();
 
@@ -33,24 +29,39 @@ class Router {
   }
 
   navigate(url: string) {
+    if (url === location.pathname) return;
+
     history.pushState(null, '', url);
     this.routing();
-    this.render();
   }
 
   routing() {
-    const currentRoute = this.routes?.find((route) => {
-      if (route.path === '') {
-        return route;
+    if (this.routes === undefined) return;
+
+    const nextRoutes = findRoute(location.pathname, '/', this.routes);
+    const outlets = document.querySelectorAll('#outlet');
+    let depth = 0;
+    let nextPointer = nextRoutes.length - 1;
+    let currPointer = this.currRoutes.length - 1;
+
+    while (this.currRoutes && nextPointer > 0 && currPointer > 0) {
+      if (nextRoutes[nextPointer].path !== this.currRoutes[currPointer].path) {
+        break;
       }
-
-      const LocationPathName = '/' + location.pathname.split('/')[1];
-      return LocationPathName === route.path;
-    });
-
-    if (currentRoute && this.route) {
-      this.route.Element = currentRoute.element;
+      nextPointer -= 1;
+      currPointer -= 1;
+      depth += 1;
     }
+
+    if (outlets[depth]) {
+      outlets[depth].innerHTML = '';
+      new nextRoutes[nextPointer].element({ $target: outlets[depth] });
+    } else {
+      const $app = document.querySelector('.App') as Element;
+      new nextRoutes[nextPointer].element({ $target: $app });
+    }
+
+    this.currRoutes = [...nextRoutes];
   }
 }
 
