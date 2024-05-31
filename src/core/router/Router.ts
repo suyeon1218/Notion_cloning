@@ -1,5 +1,5 @@
 import Component from '~/core/components/Component';
-import { findRoute } from './Util';
+import { findRenderNode, findRoute } from './Util';
 
 export interface Route {
   path: string;
@@ -39,26 +39,14 @@ class Router {
     if (this.routes === undefined) return;
 
     const nextRoutes = findRoute(location.pathname, '/', this.routes);
-    const outlets = document.querySelectorAll('#outlet');
-    let depth = 0;
-    let nextPointer = nextRoutes.length - 1;
-    let currPointer = this.currRoutes.length - 1;
+    const [renderNode, $element] = findRenderNode(nextRoutes, this.currRoutes);
 
-    while (this.currRoutes && nextPointer > 0 && currPointer > 0) {
-      if (nextRoutes[nextPointer].path !== this.currRoutes[currPointer].path) {
-        break;
-      }
-      nextPointer -= 1;
-      currPointer -= 1;
-      depth += 1;
-    }
-
-    if (outlets[depth]) {
-      outlets[depth].innerHTML = '';
-      new nextRoutes[nextPointer].element({ $target: outlets[depth] });
+    if (renderNode instanceof HTMLElement) {
+      renderNode.innerHTML = '';
+      new $element({ $target: renderNode });
     } else {
       const $app = document.querySelector('.App') as Element;
-      new nextRoutes[nextPointer].element({ $target: $app });
+      new $element({ $target: $app });
     }
 
     this.currRoutes = [...nextRoutes];

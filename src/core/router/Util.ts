@@ -82,3 +82,24 @@ function isMathcedPath(URL: string, currPath: string) {
 
   return result;
 }
+
+export function findRenderNode(
+  nextRoutes: CurrRoute[],
+  currRoutes: CurrRoute[]
+) {
+  const outlets = document.querySelectorAll('#outlet');
+  let depth = 0;
+  let nextPointer = nextRoutes.length - 1;
+  let currPointer = currRoutes.length - 1;
+
+  while (currRoutes && nextPointer > 0 && currPointer > 0) {
+    if (nextRoutes[nextPointer].path !== currRoutes[currPointer].path) {
+      break;
+    }
+    nextPointer -= 1;
+    currPointer -= 1;
+    depth += 1;
+  }
+
+  return [outlets[depth], nextRoutes[nextPointer].element] as const;
+}
