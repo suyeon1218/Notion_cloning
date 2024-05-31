@@ -19,6 +19,10 @@ class Router {
 
   constructor() {
     this.currRoutes = [];
+
+    window.addEventListener('popstate', () => {
+      this.routing();
+    });
   }
 
   createRouter(routes: Route[]) {
