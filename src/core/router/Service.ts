@@ -16,13 +16,18 @@ export function navigate(url: string) {
 
 export function Outlet() {
   const outletIndex = document.querySelectorAll('#outlet').length - 1;
-  const { element } = Router.currRoutes[outletIndex];
 
-  return element;
+  if (outletIndex < Router.currRoutes.length) {
+    const { element } = Router.currRoutes[outletIndex];
+
+    return element;
+  }
+
+  return null;
 }
 
 export function getParams() {
-  const outletLength = Router.currRoutes.length;
+  const outletIndex = document.querySelectorAll('#outlet').length;
 
-  return Router.currRoutes[outletLength].params;
+  return Router.currRoutes[outletIndex - 1].params;
 }

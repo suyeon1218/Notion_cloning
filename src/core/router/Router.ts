@@ -43,14 +43,20 @@ class Router {
     if (this.routes === undefined) return;
 
     const nextRoutes = findRoute(location.pathname, '/', this.routes);
-    const [renderNode, $element] = findRenderNode(nextRoutes, this.currRoutes);
 
-    if (renderNode instanceof HTMLElement) {
-      renderNode.innerHTML = '';
-      new $element({ $target: renderNode });
-    } else {
-      const $app = document.querySelector('.App') as Element;
-      new $element({ $target: $app });
+    if (this.currRoutes) {
+      const [renderNode, $element] = findRenderNode(
+        nextRoutes,
+        this.currRoutes
+      );
+
+      if (renderNode instanceof HTMLElement) {
+        renderNode.innerHTML = '';
+        new $element({ $target: renderNode });
+      } else {
+        const $app = document.querySelector('.App');
+        new $element({ $target: $app });
+      }
     }
 
     this.currRoutes = [...nextRoutes];
