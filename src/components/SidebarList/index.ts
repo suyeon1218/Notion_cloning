@@ -27,7 +27,7 @@ class SidebarList extends Component<
   }
 
   addEvent(): void {
-    this.$target.addEventListener('click', (event) => {
+    this.$target?.addEventListener('click', (event) => {
       if (event.target instanceof Element) {
         const { target } = event;
         const $ul = event.target.closest('ul') as HTMLUListElement;

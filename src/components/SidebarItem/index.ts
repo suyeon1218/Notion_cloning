@@ -19,8 +19,10 @@ class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
   }
 
   updated(): void {
-    const { documentItem, depth } = this.props as SidebarItemProps;
-    const { isOpen } = this.state as SidebarItemState;
+    if (this.props === undefined || this.state === undefined) return;
+
+    const { documentItem, depth } = this.props;
+    const { isOpen } = this.state;
 
     if (isOpen) {
       documentItem.documents.forEach((childDocument) =>
@@ -35,7 +37,8 @@ class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
   }
 
   addEvent() {
-    this.$target.addEventListener('click', (event) => {
+    this.$target?.addEventListener('click', (event) => {
+      event.stopPropagation();
       if (event.target instanceof Element) {
         const $button = event.target.closest('button');
 
