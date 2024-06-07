@@ -1,7 +1,6 @@
 import { Route, CurrRoute, Params } from './Router';
-import { navigate } from './Service';
 
-function getPathString(path: string) {
+function getPurePathString(path: string) {
   const pathToken = path.split('/');
   const purePath: string[] = [];
 
@@ -15,71 +14,66 @@ function getPathString(path: string) {
   return purePath.join('/');
 }
 
-export function findRoute(URL: string, currPath: string, routes: Route[]) {
-  const currRoute: CurrRoute[] = [];
+export function findRoute(
+  URL: string,
+  startPath: string,
+  rootRoutes: Route[] | undefined
+) {
+  const currRoutes: CurrRoute[] = [];
 
-  function find(currPath: string, childrenRoutes: Route[]) {
-    for (const route of childrenRoutes) {
+  function find(prevPath: string, subRoutes: Route[] | undefined) {
+    if (subRoutes === undefined) return null;
+
+    for (const route of subRoutes) {
       const { path, children } = route;
-      const nextPath = (currPath + path).replace('//', '/');
-      const { isMatched, params, paramId } = isMathcedPath(URL, nextPath);
-      const purePath = getPathString(path);
+      const currPath = (prevPath + path).replace('//', '/');
+      const { isMatched, params, paramId } = isMathcedPath(URL, currPath);
+      const purePath = getPurePathString(path);
+      const pathString = paramId ? `${purePath}/${params[paramId]}` : purePath;
 
       if (isMatched) {
-        paramId
-          ? currRoute.push({
-              ...route,
-              path: `${purePath}/${params[paramId]}`,
-              params,
-            })
-          : currRoute.push({ ...route, path: purePath, params });
-        return currRoute;
+        currRoutes.push({ ...route, path: pathString, params });
+        return route;
       }
       if (children) {
-        const matchedRoute = find(nextPath, children);
+        const matchedRoute = find(currPath, children);
 
-        if (matchedRoute) {
-          paramId
-            ? currRoute.push({
-                ...route,
-                path: `${purePath}/${params[paramId]}`,
-                params,
-              })
-            : currRoute.push({ ...route, path: `${purePath}`, params });
+        if (matchedRoute !== null) {
+          currRoutes.push({
+            ...route,
+            path: pathString,
+            params,
+          });
+
           return route;
         }
       }
     }
     return null;
   }
+  find(startPath, rootRoutes);
 
-  find(currPath, routes);
-
-  if (currRoute.length === 0) {
-    navigate('/404');
-  }
-
-  return currRoute;
+  return currRoutes;
 }
 
-function isMathcedPath(URL: string, currPath: string) {
+function isMathcedPath(URL: string, startPath: string) {
   const result: {
     params: Params;
     isMatched: boolean;
     paramId: string | undefined;
   } = { params: {}, isMatched: false, paramId: undefined };
 
-  const URLTokens = URL.split('/');
-  const currPathTokens = currPath.split('/');
-
-  if (URL === currPath) {
+  if (URL === startPath) {
     result.isMatched = true;
     return result;
   }
 
+  const URLTokens = URL.split('/');
+  const startPathTokens = startPath.split('/');
+
   result.isMatched =
-    currPathTokens.length === URLTokens.length &&
-    currPathTokens.every((token, index) => {
+    startPathTokens.length === URLTokens.length &&
+    startPathTokens.every((token, index) => {
       if (token.startsWith(':')) {
         const [param, value] = [token.slice(1), URLTokens[index]];
         result.params[param] = value;

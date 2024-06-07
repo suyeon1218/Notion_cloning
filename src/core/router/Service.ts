@@ -15,19 +15,15 @@ export function navigate(url: string) {
 }
 
 export function Outlet() {
-  const outletIndex = document.querySelectorAll('#outlet').length - 1;
+  const outletIndex = document.querySelectorAll('#outlet').length;
+  const targetRoute = Router.currRoutes[Router.currRoutes.length - outletIndex];
 
-  if (outletIndex < Router.currRoutes.length) {
-    const { element } = Router.currRoutes[outletIndex];
-
-    return element;
-  }
-
-  return null;
+  return targetRoute ? targetRoute.element : null;
 }
 
 export function getParams() {
   const outletIndex = document.querySelectorAll('#outlet').length;
+  const targetRoute = Router.currRoutes[Router.currRoutes.length - outletIndex];
 
-  return Router.currRoutes[outletIndex - 1].params;
+  return targetRoute ? targetRoute.params : undefined;
 }

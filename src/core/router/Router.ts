@@ -40,26 +40,27 @@ class Router {
   }
 
   routing() {
-    if (this.routes === undefined) return;
-
     const nextRoutes = findRoute(location.pathname, '/', this.routes);
 
-    if (this.currRoutes) {
-      const [renderNode, $element] = findRenderNode(
-        nextRoutes,
-        this.currRoutes
-      );
-
-      if (renderNode instanceof HTMLElement) {
-        renderNode.innerHTML = '';
-        new $element({ $target: renderNode });
-      } else {
-        const $app = document.querySelector('.App');
-        new $element({ $target: $app });
-      }
+    if (nextRoutes.length === 0) {
+      this.navigate('/404');
+      return;
+    }
+    if (this.currRoutes === undefined) {
+      this.currRoutes = [...nextRoutes];
+      return;
     }
 
+    const [renderNode, $element] = findRenderNode(nextRoutes, this.currRoutes);
     this.currRoutes = [...nextRoutes];
+
+    if (renderNode instanceof HTMLElement) {
+      renderNode.innerHTML = '';
+      new $element({ $target: renderNode });
+    } else {
+      const $app = document.querySelector('.App');
+      new $element({ $target: $app });
+    }
   }
 }
 
