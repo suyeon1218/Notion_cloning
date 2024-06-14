@@ -1,20 +1,16 @@
-import { requestRootDocument } from '~/api/request';
 import Component from '~/core/components/Component';
 import SidebarItem from '../SidebarItem';
 import { navigate } from '~/core/router';
-
-export interface DocumentItemType {
-  id: string;
-  title: string;
-  documents: DocumentItemType[];
-}
+import { DocumentItem } from '~/types';
+import { documentAPI } from '~/service';
 
 class SidebarList extends Component<
   { [key: string]: string },
-  DocumentItemType[]
+  DocumentItem[] | undefined
 > {
   async beforeMount(): Promise<void> {
-    const data = (await requestRootDocument()) as DocumentItemType[];
+    const data = await documentAPI.getDocuments();
+
     this.setState(data);
   }
 
