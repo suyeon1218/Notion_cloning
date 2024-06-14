@@ -1,4 +1,7 @@
-export const request = async (path: string, options?: any) => {
+const request = async <T>(
+  path: string,
+  options?: Partial<RequestInit>
+): Promise<T | undefined> => {
   try {
     const response = await fetch(`/api/documents/${path}`, {
       ...options,
@@ -8,15 +11,14 @@ export const request = async (path: string, options?: any) => {
     });
 
     if (response.ok) {
-      const data = response.json();
+      const data: Promise<T> = response.json();
 
       return data;
     }
+    return undefined;
   } catch (error) {
     throw new Error('API ERROR');
   }
 };
 
-export const requestRootDocument = async () => {
-  return await request('');
-};
+export default request;
