@@ -7,6 +7,11 @@ const documentAPI = {
 
     return data;
   },
+  getDocumentById: async (id: string) => {
+    const data = await makeRequest.get<DocumentItem>(`/${id}`);
+
+    return data;
+  },
 };
 
 export default documentAPI;
