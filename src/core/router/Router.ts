@@ -1,5 +1,5 @@
 import Component from '~/core/components/Component';
-import { findRenderNode, findRoute } from './Util';
+import { findRenderNode, findRoute } from './util';
 
 export interface Route {
   path: string;
