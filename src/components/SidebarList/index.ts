@@ -1,4 +1,4 @@
-import Component from '~/core/components/Component';
+import Component, { ComponentProps } from '~/core/components/Component';
 import SidebarItem from '../SidebarItem';
 import { navigate } from '~/core/router';
 import { DocumentItem } from '~/types';
@@ -8,7 +8,25 @@ class SidebarList extends Component<
   { [key: string]: string },
   DocumentItem[] | undefined
 > {
-  async beforeMount(): Promise<void> {
+  constructor({ $target }: ComponentProps) {
+    super({ $target });
+
+    this.$target?.addEventListener('click', (event) => {
+      if (event.target instanceof HTMLElement) {
+        const $ul = event.target.closest('ul');
+
+        if (
+          $ul instanceof HTMLElement &&
+          event.target.classList.contains('sidebar__item-title')
+        ) {
+          const { id } = $ul.dataset;
+          id && navigate(`/documents/${id}`);
+        }
+      }
+    });
+  }
+
+  async mounted(): Promise<void> {
     const data = await documentAPI.getDocuments();
 
     this.setState(data);
@@ -20,20 +38,6 @@ class SidebarList extends Component<
         props: { documentItem, depth: 0 },
       })
     );
-  }
-
-  addEvent(): void {
-    this.$target?.addEventListener('click', (event) => {
-      if (event.target instanceof Element) {
-        const { target } = event;
-        const $ul = event.target.closest('ul') as HTMLUListElement;
-
-        if (target && target.classList.contains('sidebar__item-title')) {
-          const { id } = $ul.dataset;
-          navigate(`/documents/${id}`);
-        }
-      }
-    });
   }
 
   template(): string {

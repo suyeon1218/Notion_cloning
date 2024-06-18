@@ -1,8 +1,8 @@
-import Component from '~/core/components/Component';
-import { DocumentItemType } from '../SidebarList';
+import Component, { ComponentProps } from '~/core/components/Component';
+import { DocumentItem } from '~/types';
 
 interface SidebarItemProps {
-  documentItem: DocumentItemType;
+  documentItem: DocumentItem;
   depth: number;
 }
 
@@ -11,11 +11,30 @@ interface SidebarItemState {
 }
 
 class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
-  beforeMount(): void {
-    this.setState({
-      ...this.state,
-      isOpen: false,
+  constructor({ $target, props, state }: ComponentProps) {
+    super({ $target, props, state });
+    this.state = { ...state, isOpen: false };
+
+    this.$target?.addEventListener('click', (event) => {
+      if (event.target instanceof HTMLElement) {
+        const $button = event.target.closest('button');
+
+        if (
+          $button instanceof HTMLElement &&
+          $button.className === 'sidebar__item-toggle'
+        ) {
+          event.stopPropagation();
+          const { isOpen } = this.state as SidebarItemState;
+
+          this.setState({
+            ...this.state,
+            isOpen: !isOpen,
+          });
+        }
+      }
     });
+
+    this.render();
   }
 
   updated(): void {
@@ -36,25 +55,9 @@ class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
     }
   }
 
-  addEvent() {
-    this.$target?.addEventListener('click', (event) => {
-      event.stopPropagation();
-      if (event.target instanceof Element) {
-        const $button = event.target.closest('button');
-
-        if ($button?.className === 'sidebar__item-toggle') {
-          const { isOpen } = this.state as SidebarItemState;
-
-          this.setState({
-            ...this.state,
-            isOpen: !isOpen,
-          });
-        }
-      }
-    });
-  }
-
   template(): string {
+    if (this.props === undefined || this.state === undefined) return ``;
+
     const { documentItem, depth } = this.props as SidebarItemProps;
     const { isOpen } = this.state as SidebarItemState;
 

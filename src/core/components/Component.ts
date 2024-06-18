@@ -18,7 +18,6 @@ class Component<Props = any, State = any> {
 
     this.beforeMount();
     this.render();
-    this.addEvent();
     this.mounted();
   }
 
@@ -26,8 +25,6 @@ class Component<Props = any, State = any> {
     this.state = nextState;
     this.render();
   }
-
-  addEvent() {}
 
   beforeMount() {}
 
@@ -51,7 +48,7 @@ class Component<Props = any, State = any> {
   }
 
   initComponent() {
-    if (this.$target instanceof Element) {
+    if (this.$target instanceof HTMLElement) {
       this.$target.innerHTML = '';
     }
   }
