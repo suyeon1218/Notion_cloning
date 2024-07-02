@@ -3,6 +3,16 @@
 @import url('./main-page.css');
 @import url('./emoji-selector.css');
 
+:root {
+  --notion-gray: rgb(247, 247, 247);
+  --notion-deep-gray: rgb(228, 228, 228);
+  --notion-deep-gray-hover: rgb(218, 217, 217);
+  --notion-font-gray: rgb(104, 102, 102);
+  --notion-font-deep-gray: #aaa;
+  --notion-border-gray: #eee;
+  --notion-shadow-gray: #ddd;
+}
+
 body > * {
   font-family: 'Pretendard Variable', Pretendard, -apple-system,
     BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
