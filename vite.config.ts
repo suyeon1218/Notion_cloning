@@ -10,9 +10,15 @@ export default ({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: process.env.VITE_API_END_POINT,
+          target: process.env.VITE_NOTION_API_END_POINT,
           changeOrigin: false,
-          rewrite: (path) => path.replace(/^\/api/, ''),
+          rewrite: (path) => path.replace(/^\/notion/, ''),
+          secure: false,
+        },
+        '/emoji': {
+          target: process.env.VITE_EMOJI_API_ENO_POINT,
+          changeOrigin: false,
+          rewrite: (path) => path.replace(/^\/emoji/, ''),
           secure: false,
         },
       },
