@@ -1,7 +1,7 @@
 import { HTTP_METHOD } from '~/constants';
 import { notionAPIClient } from './apiClient';
 
-export const requestNotionAPI = {
+const requestNotionAPI = {
   get: async <T>(url: string) => {
     const response = await notionAPIClient<T>(url, { method: HTTP_METHOD.GET });
 
@@ -40,3 +40,5 @@ export const requestNotionAPI = {
     return response;
   },
 };
+
+export default requestNotionAPI;

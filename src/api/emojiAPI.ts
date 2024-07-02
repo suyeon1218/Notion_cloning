@@ -1,7 +1,7 @@
 import { HTTP_METHOD } from '~/constants';
 import { emojiAPIClient } from './apiClient';
 
-export const requestEmojiAPI = {
+const requestEmojiAPI = {
   get: async <T>(url: string) => {
     const response = await emojiAPIClient<T>(url, { method: HTTP_METHOD.GET });
 
@@ -40,3 +40,5 @@ export const requestEmojiAPI = {
     return response;
   },
 };
+
+export default requestEmojiAPI;
