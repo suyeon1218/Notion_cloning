@@ -8,8 +8,8 @@ type ChildComponent = new ({ ...args }: ComponentProps) => Component;
 
 class Component<Props = any, State = any> {
   $target;
-  props;
-  state;
+  props: Props | undefined;
+  state: State | undefined;
 
   constructor({ $target, props, state }: ComponentProps<Props, State>) {
     this.$target = $target;
