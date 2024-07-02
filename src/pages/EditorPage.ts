@@ -1,6 +1,7 @@
+import Emoji from '~/components/Emoji';
 import Component, { ComponentProps } from '~/core/components/Component';
 import { getParams } from '~/core/router';
-import { documentAPI } from '~/service';
+import { notionAPI } from '~/service';
 import { DocumentItem } from '~/types';
 
 class EditorPage extends Component {
@@ -18,15 +19,21 @@ class EditorPage extends Component {
 
   async mounted() {
     if (this.id === undefined) return;
-    this.document = await documentAPI.getDocumentById(this.id);
+    this.document = await notionAPI.getDocumentById(this.id);
   }
 
   // update 로 하위 컴포넌트 연결
+  updated() {
+    this.children(Emoji, '#emoji');
+  }
 
   template(): string {
     // 하위 컴포넌트 전달
     return `<main>
-      <h1>${this.id} 페이지</h1>
+      <h1>
+        <span id='emoji'></span>
+        <span id='title'></span>
+      </h1>
     </main>`;
   }
 }

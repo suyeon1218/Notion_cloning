@@ -2,7 +2,7 @@ import Component, { ComponentProps } from '~/core/components/Component';
 import SidebarItem from '../SidebarItem';
 import { navigate } from '~/core/router';
 import { DocumentItem } from '~/types';
-import { documentAPI } from '~/service';
+import { notionAPI } from '~/service';
 
 class SidebarList extends Component<
   { [key: string]: string },
@@ -27,7 +27,7 @@ class SidebarList extends Component<
   }
 
   async mounted(): Promise<void> {
-    const data = await documentAPI.getDocuments();
+    const data = await notionAPI.getDocuments();
 
     this.setState(data);
   }
