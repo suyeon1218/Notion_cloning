@@ -1,7 +1,7 @@
-export const makeQueryString = (
+export function makeQueryString(
   queryKeys: Record<string, number | string | undefined>
-) => {
+) {
   return Object.entries(queryKeys)
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
-};
+}
