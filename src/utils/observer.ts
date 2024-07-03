@@ -10,7 +10,6 @@ export default function observer({ target, callback }: observerProps) {
   ) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        console.log(entry);
         callback();
         observer.unobserve(target);
       }
