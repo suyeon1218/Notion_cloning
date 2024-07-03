@@ -2,46 +2,91 @@ import { EMOJI } from '~/constants';
 import Component, { ComponentProps } from '~/core/components/Component';
 import { emojiAPI } from '~/service';
 import { Emoji } from '~/types';
+import observer from '~/utils/observer';
 
-interface EmojiState {
-  emojiIndex: number;
-  emojis: Emoji[];
+interface EmojiSelectorState {
+  emojis: {
+    name: keyof typeof EMOJI.CATEGORY;
+    emoji: Emoji[];
+  }[];
 }
 
-export default class EmojiSelector extends Component<undefined, EmojiState> {
+function isCategoryKeys(key: string): key is keyof typeof EMOJI.CATEGORY {
+  const categoryKeys = Object.keys(EMOJI.CATEGORY);
+
+  for (const categoryKey of categoryKeys) {
+    if (categoryKey === key) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export default class EmojiSelector extends Component<
+  undefined,
+  EmojiSelectorState
+> {
   static emojiCategory: typeof EMOJI.CATEGORY = EMOJI.CATEGORY;
+  static categoryKeys = Object.keys(EMOJI.CATEGORY);
+  emojiIndex: number;
+  prevScroll: number;
 
   constructor({
     $target,
     props,
     state,
-  }: ComponentProps<undefined, EmojiState>) {
+  }: ComponentProps<undefined, EmojiSelectorState>) {
     super({ $target, props, state });
     this.state = {
       emojis: [],
-      emojiIndex: 0,
     };
+    this.emojiIndex = 0;
+    this.prevScroll = 0;
 
-    this.mounted();
+    this.updateIndex(0);
   }
 
-  async mounted(): Promise<void> {
+  async updateIndex(nextIndex: number) {
     if (this.state === undefined) return;
-    const categoryKeys = Object.keys(EmojiSelector.emojiCategory);
+    if (nextIndex >= EmojiSelector.categoryKeys.length) return;
 
-    const initialEmoji = await emojiAPI.getEmojiByGroup(
-      categoryKeys[this.state.emojiIndex]
+    this.emojiIndex = nextIndex;
+    const $emojiBody = document.querySelector('.emoji-body');
+    const emojiData = await emojiAPI.getEmojiByGroup(
+      EmojiSelector.categoryKeys[this.emojiIndex]
     );
+    const categoryKey = EmojiSelector.categoryKeys[this.emojiIndex];
+    const scroll = $emojiBody?.scrollTop;
 
-    if (initialEmoji) {
+    if (emojiData === undefined) return;
+    if (isCategoryKeys(categoryKey)) {
+      this.prevScroll = scroll ?? 0;
       this.setState({
         ...this.state,
-        emojis: [...initialEmoji],
+        emojis: [...this.state.emojis, { name: categoryKey, emoji: emojiData }],
       });
     }
   }
 
-  updated() {}
+  async updated() {
+    const $emojiItems = document.querySelectorAll('.emoji-item');
+    const $emojiBody = document.querySelector('.emoji-body');
+
+    if ($emojiItems && $emojiBody) {
+      const lastEmoji = $emojiItems[$emojiItems.length - 1];
+      $emojiBody.scrollTo(0, this.prevScroll);
+
+      if (lastEmoji instanceof HTMLElement) {
+        observer({
+          target: lastEmoji,
+          callback: () => {
+            this.updateIndex(this.emojiIndex + 1);
+          },
+        });
+      }
+    }
+  }
 
   template(): string {
     return `
@@ -60,7 +105,17 @@ export default class EmojiSelector extends Component<undefined, EmojiState> {
                 ${this.state.emojis
                   .map(
                     (emoji) =>
-                      `<span class='emoji-item'>${emoji.character}</span>`
+                      `<div class='emoji-ul'>
+                        <div class='emoji-category'>${
+                          EMOJI.CATEGORY[emoji.name]
+                        }</div>
+                        <div class='emoji-li'>${emoji.emoji
+                          .map(
+                            (emoji) =>
+                              `<span class='emoji-item'>${emoji.character}</span>`
+                          )
+                          .join('')}</div>
+                      </div> `
                   )
                   .join('')}
                 </div>`

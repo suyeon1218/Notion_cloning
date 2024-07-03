@@ -14,7 +14,6 @@ export const EMOJI = Object.freeze({
   CATEGORY: {
     'smileys-emotion': '감정',
     'people-body': '사람',
-    component: '커스텀',
     'animals-nature': '동물 및 자연',
     'food-drink': '음식',
     'travel-places': '장소',

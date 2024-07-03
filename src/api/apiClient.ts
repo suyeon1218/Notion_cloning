@@ -35,7 +35,6 @@ export const emojiAPIClient = async <T>(
 
       return data;
     }
-
     return undefined;
   } catch (error) {
     throw new Error('API ERROR');

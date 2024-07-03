@@ -49,15 +49,33 @@
 .emoji-body {
   width: 90%;
   margin: 0 auto;
-  overflow-y: scroll;
   height: calc(100% - 50px);
+  overflow-y: scroll;
+}
+
+.emoji-ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emoji-category {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  color: var(--notion-font-gray);
+  font-size: 12px;
+}
+
+.emoji-li {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(8, 1fr);
+  gap: 5px;
 }
 
 .emoji-item {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 5px;
   display: flex;
   justify-content: center;
