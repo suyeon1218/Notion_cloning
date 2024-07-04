@@ -11,18 +11,18 @@ class EditorPage extends Component {
   constructor({ $target }: ComponentProps) {
     super({ $target });
 
-    const params = getParams();
-    this.id = params?.id;
-
     this.render();
   }
 
   async mounted() {
-    if (this.id === undefined) return;
-    this.document = await notionAPI.getDocumentById(this.id);
+    const params = getParams();
+
+    if (params) {
+      this.id = params.id;
+      this.document = await notionAPI.getDocumentById(this.id as string);
+    }
   }
 
-  // update 로 하위 컴포넌트 연결
   updated() {
     this.children(Emoji, '#emoji');
   }
