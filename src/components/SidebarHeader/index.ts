@@ -15,7 +15,9 @@ class SidebarHeader extends Component {
       `;
   }
 
-  addEvent(): void {
+  updated(): void {
+    if (this.$target === null) return;
+
     this.$target.addEventListener('click', (event) => {
       event.stopPropagation();
 
