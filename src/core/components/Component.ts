@@ -1,7 +1,6 @@
-export interface ComponentProps<Props = any, State = any> {
+export interface ComponentProps<Props = any> {
   $target: Element | null;
   props?: Props;
-  state?: State;
 }
 
 type ChildComponent = new ({ ...args }: ComponentProps) => Component;
@@ -11,10 +10,10 @@ class Component<Props = any, State = any> {
   props: Props | undefined;
   state: State | undefined;
 
-  constructor({ $target, props, state }: ComponentProps<Props, State>) {
+  constructor({ $target, props }: ComponentProps<Props>) {
     this.$target = $target;
     this.props = props;
-    this.state = state;
+    this.state = undefined;
 
     this.beforeMount();
     this.render();
