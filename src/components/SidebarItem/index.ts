@@ -11,9 +11,9 @@ interface SidebarItemState {
 }
 
 class SidebarItem extends Component<SidebarItemProps, SidebarItemState> {
-  constructor({ $target, props, state }: ComponentProps) {
-    super({ $target, props, state });
-    this.state = { ...state, isOpen: false };
+  constructor({ $target, props }: ComponentProps) {
+    super({ $target, props });
+    this.state = { isOpen: false };
 
     this.$target?.addEventListener('click', (event) => {
       if (event.target instanceof HTMLElement) {
