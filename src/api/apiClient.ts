@@ -3,7 +3,7 @@ export const notionAPIClient = async <T>(
   options?: Partial<RequestInit>
 ): Promise<T | undefined> => {
   try {
-    const response = await fetch(`/notion/documents/${path}`, {
+    const response = await fetch('/notion/documents' + path, {
       ...options,
       headers: {
         'x-username': 'suyeon',
@@ -26,7 +26,7 @@ export const emojiAPIClient = async <T>(
   options?: Partial<RequestInit>
 ) => {
   try {
-    const response = await fetch(`/emoji/${path}`, {
+    const response = await fetch('/emoji' + path, {
       ...options,
     });
 
