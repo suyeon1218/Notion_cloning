@@ -1,2 +1,3 @@
 export * from './API';
-export * from './observer';
+export { default as observer } from './observer';
+export { default as debounce } from './debounce';
